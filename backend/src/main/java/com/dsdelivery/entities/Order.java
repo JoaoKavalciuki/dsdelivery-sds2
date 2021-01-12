@@ -101,6 +101,16 @@ public class Order implements Serializable{
         return this.products;
     }
 
+    public Double getTotal() {
+        Double sum = 0.0;
+
+        for(Product p : products) {
+            sum += p.getPrice();
+        }
+
+        return sum;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -127,4 +137,5 @@ public class Order implements Serializable{
 
         return true;
     }
+
 }
