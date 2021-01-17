@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import {toast, ToastContainer} from 'react-toastify';
 import Footer from "../footer";
-import { fetchProducts } from "./api";
+import { fetchProducts, saveOrder } from "../api";
 import { checkIsSelected } from "./helpers";
 
 import OrderLocation from "./OrderLocation";
@@ -14,9 +15,11 @@ function Orders()  {
     const[products, setProducts] = useState<Product[]>([]);
     const[selectedProducts, setSelectedProducts] = useState<Product[]>([]);
     const [orderLocation, setOrderLocation] = useState<OrderLocationData>();
+
     const totalPrice = selectedProducts.reduce((sum, item) => {
         return sum + item.price;
     }, 0)
+
     useEffect(() => {
         fetchProducts()
             .then(response => setProducts(response.data))
@@ -33,7 +36,24 @@ function Orders()  {
         } else {
           setSelectedProducts(previous => [...previous, product]);
         }
+    }
+
+    const handleSubmit = () => {
+        const productsIds = selectedProducts.map(({ id }) => ({ id }));
+        const payload = {
+          ...orderLocation!,
+          products: productsIds
+        }
+      
+        saveOrder(payload).then((response) => {
+          toast.error(`Pedido Nº${response.data.id} enviado com sucesso!`);
+          setSelectedProducts([]);
+        })
+          .catch(() => {
+            toast.warning('Erro ao enviar pedido');
+          })
       }
+      
 
     return(
         //I was doing the summary of itens.
@@ -53,6 +73,7 @@ function Orders()  {
                 <OrderSummary 
                 amount = {selectedProducts.length} 
                 totalPrice = {totalPrice}
+                onSubmit = {handleSubmit}
                 />
             </div>
             <Footer/>
