@@ -2,7 +2,8 @@ import React from 'react'
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from "./home";
-import Orders from "./orders/Orders";
+import Orders from "./orders";
+import OrderDetails from './orderDetails';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ export default function Routes() {
             >
             <Stack.Screen name = "Home" component = {Home}></Stack.Screen>
             <Stack.Screen name = "Orders" component = {Orders}></Stack.Screen>
-
+            <Stack.Screen name = "OrderDetails" component = {OrderDetails}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );
